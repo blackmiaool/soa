@@ -1,36 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="BasicHttpAuthExample">
 
-<head>
-    <meta charset="utf-8">
-    <title>test</title>
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <title>AngularJS Basic HTTP Authentication Example</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+  </head>
 
-<body ng-app="myApp">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
-    <script src="index.js"></script>
-    <div class="container" ng-app="myApp">
-        <div ng-controller="aController">
-            <form name="form" ng-submit="login()" role="form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <i class="fa fa-key"></i>
-                    <input type="text" name="username" id="username" class="form-control" ng-model="username" required />
-                    <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <i class="fa fa-lock"></i>
-                    <input type="password" name="password" id="password" class="form-control" ng-model="password" required />
-                    <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn btn-danger">Login</button>
-                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                </div>
-            </form>
+  <body>
+  
+    <div class="jumbotron">
+      <div class="container">
+        <div class="col-xs-offset-2 col-xs-8">
+          <div ng-view></div>
         </div>
+      </div>
     </div>
-</body>
+
+    <div class="credits text-center">
+      <p>
+          <a href="http://jasonwatmore.com/post/2014/05/26/AngularJS-Basic-HTTP-Authentication-Example.aspx">AngularJS Basic HTTP Authentication Example</a>
+      </p>
+      <p>
+        <a href="http://jasonwatmore.com">JasonWatmore.com</a>
+      </p>
+    </div>
+
+    <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="//code.angularjs.org/1.2.20/angular.js"></script>
+    <script src="//code.angularjs.org/1.2.20/angular-route.js"></script>
+    <script src="//code.angularjs.org/1.2.13/angular-cookies.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="modules/authentication/services.js"></script>
+    <script src="modules/authentication/controllers.js"></script>
+    <script src="modules/home/controllers.js"></script>
+  </body>
 
 </html>

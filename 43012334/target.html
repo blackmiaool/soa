@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="BasicHttpAuthExample">
+
+<head>
+    <meta charset="utf-8" />
+    <title>target page</title>
+</head>
+
+<body>
+    <h4>input the url you want to test:</h4>
+    <textarea type="text" id="input" style="width:300px;height:100px;">
+        </textarea>
+    <br>
+    <div>try <span style="color:red">wss://echo.websocket.org</span> for success result(may be slow)</div>
+    <button onclick="test()">test</button>
+    <div id="output"></div>
+    <script>
+        var origin = location.origin;
+        var testUrl = origin.replace(/^https?/, "ws") + "/abcdef"; //not available of course
+        document.querySelector("#input").value = testUrl;
+
+        function output(val) {
+
+            document.querySelector("#output").textContent = val;
+        }
+
+        function test() {
+            if (window.opener) {
+                window.opener.postMessage({
+                    action: "testUrl",
+                    url: document.querySelector("#input").value,
+                    origin,
+                }, origin);
+            } else {
+                alert("opener is not available");
+            }
+
+        }
+        window.addEventListener('message', function(e) {
+            var msg = e.data;
+            if (msg.action === "urlResult") {
+                output(`test ${msg.url} result: ${msg.data}`);
+            }
+        });
+
+    </script>
+</body>
+
+</html>

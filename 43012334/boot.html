@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="BasicHttpAuthExample">
+
+<head>
+    <meta charset="utf-8" />
+    <title>boot page</title>
+
+</head>
+
+<body>
+    <button onclick="boot()">boot</button>
+    <p>BTW, you can boot the page without the button if you are willing to allow the "pop-up"</p>
+    <script>
+        var targetWindow;
+
+        function init() {
+            targetWindow
+        }
+
+        function boot() {
+            targetWindow = window.open("target.html");
+        }
+        boot();
+        window.addEventListener('message', function(e) {
+            var msg = e.data;
+            var {
+                action,
+                url,
+                origin,
+            } = msg;
+
+            if (action === "testUrl") {
+                let ws = new WebSocket(url);
+                ws.addEventListener("error", function() {
+                    targetWindow.postMessage({
+                        action: "urlResult",
+                        url,
+                        data: false,
+                    }, origin);
+                    ws.close();
+                });
+                ws.addEventListener("open", function() {
+                    targetWindow.postMessage({
+                        action: "urlResult",
+                        url,
+                        data: true,
+                    }, origin);
+                    ws.close();
+                });
+            }
+
+
+        });
+
+    </script>
+</body>
+
+</html>
