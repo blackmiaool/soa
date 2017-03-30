@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>boot page</title>
+    <script src="../js/jquery-3.2.0.js"></script>
+</head>
+
+<body>
+    <button onclick="test()">test</button>
+    <p>BTW, you can boot the page without the button if you are willing to allow the "pop-up"</p>
+    <script>
+        function test() {
+            let ws = new WebSocket("ws://sdl323kfj.com/sdlfiuj");
+            ws.addEventListener("error", function() {
+                window.parent.c();
+                ws.close();
+            });
+            ws.addEventListener("open", function() {
+                window.parent.postMessage({
+
+                }, location.origin);
+                ws.close();
+            });
+        }
+
+    </script>
+</body>
+
+</html>

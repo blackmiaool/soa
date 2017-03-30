@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>boot page</title>
+    <script src="../js/jquery-3.2.0.js"></script>
+</head>
+
+<body>
+    <button onclick="boot()">boot</button>
+    <p>BTW, you can boot the page without the button if you are willing to allow the "pop-up"</p>
+    <iframe src="./iframe.sspdf" frameborder="0"></iframe>
+    <script>
+        function boot() {
+            window.open("www.baidu.com", '_blank', 'location=yes,height=570,width=520');
+        }
+        var targetWindow;
+
+        function init() {
+            targetWindow
+        }
+
+        function c() {
+            console.log("c");
+            $('iframe').remove();
+        }
+        console.dir();
+        window.addEventListener('message', function(e) {
+            console.log("123")
+            $('iframe').remove();
+
+
+        });
+
+    </script>
+</body>
+
+</html>
