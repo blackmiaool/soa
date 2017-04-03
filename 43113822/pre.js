@@ -163,19 +163,28 @@ var yAxisLabel = svg.append('text')
     .attr('dy', -5)
     .attr('text-anchor', 'middle');
 
-//console.log(keys);
 
+var fKeyReference = fKeys.map(function (key) {
+    return true; //used to indicate if the corresponding key is active
+});
+
+function getActiveKeys(reference) {
+    return reference.map(function (state, index) {
+        if (state) {
+            return keys[index]; //just keep keys whoes state is true
+        }
+        return false; //return false to be filered
+    }).filter(name => name);
+}
 var legendItem = d3.select(".legend") // Create legend (not needed inside redraw function, renders only once)
     .selectAll("li")
     .data(keys)
     .enter()
     .append("li")
     .on('click', function (d) {
-        if (fKeys.length < keys.length) {
-            fKeys = keys.slice();
-        } else {
-            fKeys.splice(fKeys.findIndex(key => key === d), 1);
-        }
+        var index = keys.indexOf(d);
+        fKeyReference[index] = !fKeyReference[index]; // toggle state of fKeyReference
+        fKeys = getActiveKeys(fKeyReference);
         redraw();
     });
 
