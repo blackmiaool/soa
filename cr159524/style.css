@@ -1,0 +1,78 @@
+#progressbar-container {
+    display: flex;
+    position: relative;
+    width: 50vw;
+    height: 32px;
+    border: 2px solid black;
+    background-color: #ccc;
+    justify-content: space-between;
+}
+
+#progressbar-left {
+    position: relative;
+    height: 100%;
+    background-color: blue;
+    transition: width 2s;
+    align-items: center;
+    justify-content: center;
+}
+
+#progressbar-right {
+    position: relative;
+    height: 100%;
+    background-color: red;
+    transition: width 2s;
+    align-items: center;
+    justify-content: center;
+}
+
+.tooltip {
+    display: none;
+    position: fixed;
+    width: auto;
+    height: auto;
+    padding: 6px;
+    background-color: black;
+    text-align: center;
+    border-radius: 6px;
+    z-index: 1;
+}
+
+.object {
+    display: inline-block;
+    color: #fff;
+}
+
+.percent-value {
+    display: inline-block;
+    color: #fff;
+}
+
+#progressbar-left:hover .tooltip {
+    display: block;
+}
+
+#progressbar-right:hover .tooltip {
+    display: block;
+}
+
+#total {
+    display: block;
+    font-weight: bold;
+}
+
+#total-amount {
+    display: inline-block;
+    font-weight: normal;
+}
+
+#blue,
+#red {
+    display: block;
+    font-weight: bold;
+}
+
+.percent-amount {
+    display: inline-block;
+    font-weight: normal;
+}

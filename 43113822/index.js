@@ -48,7 +48,7 @@ var tooltip = d3.select(parent)
 var tooltipWidth, lastDate;
 var mousemoveFunc = function (d, i) {
     var mouse = d3.mouse(svg.node()).map(function (d) {
-        console.log("d",d);
+        console.log("d", d);
         return parseInt(d);
     });
     var left = Math.min(containerwidth, mouse[0] + margin.left),
@@ -173,6 +173,13 @@ var legendItem = d3.select(".legend") // Create legend (not needed inside redraw
         // Go through both keys and fKeys to find out proper
         // position to insert keyToToggle if it is to be inserted
         var i, j;
+        if (fKeys.length < keys.length) {
+            fKeys = keys.slice();
+        } else {
+            fKeys.splice(fKeys.indexOf(keyToToggle), 1);
+        }
+        redraw();
+        return;
         for (i = 0, j = 0; i < keys.length; i++) {
             // If we hit the end of fKeys, keyToToggle
             // should be last
@@ -200,7 +207,7 @@ var legendItem = d3.select(".legend") // Create legend (not needed inside redraw
                 j++;
         }
 
-        redraw();
+
     });
 
 legendItem
@@ -220,7 +227,7 @@ var tickArr = [];
 redraw();
 
 function redraw() {
-
+    console.log("redraw");
     containerwidth = parentNode.getBoundingClientRect().width;
     containerheight = parentNode.getBoundingClientRect().height;
     width = containerwidth - margin.left - margin.right;
