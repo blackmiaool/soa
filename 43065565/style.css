@@ -1,0 +1,45 @@
+html,
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    background-color: #f1f1f1;
+    position: relative;
+    display: block;
+}
+
+#tree-container {
+    position: relative;
+    display: block;
+    margin-left: 100px;
+    height: 100%;
+    width: 100%;
+}
+
+.node circle {
+    stroke-width: 1.5px;
+}
+
+.node {
+    font: 10px sans-serif;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+}
+
+.label-text {
+    -webkit-user-select: none;
+    /* Chrome/Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* IE10+ */
+    /* Rules below not implemented in browsers yet */
+    -o-user-select: none;
+    user-select: none;
+}
