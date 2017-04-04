@@ -11,7 +11,7 @@
     <div id="tree-container"></div>
     <link rel="stylesheet" href="style.css">
     <script src="d3.v4.min.js"></script>
-    <script src="index.js"></script>
+    <script src="pre.js"></script>
 </body>
 
 </html>

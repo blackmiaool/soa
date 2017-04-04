@@ -197,6 +197,7 @@ function drawIt(root) {
     var maxDepth = d3.max(nodes, function(d) {
         return d.depth
     });
+    
     var link = svg.selectAll("path.link").data(cluster.links(nodes));
     //This nodes callback is SUPER important for the update pattern
     var node = svg.selectAll("g.node").data(nodes, function(d) {

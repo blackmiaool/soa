@@ -181,7 +181,7 @@ function showAllCurrentPathsAndNodes() {
 
 // Toggle children on click.
 function clickedNode(d, root) {
-    //Accounting for the transition bug on the delay
+    //Accounting for the transition bug on the delay   
     showAllCurrentPathsAndNodes();
 
     if (d.children) {
@@ -196,25 +196,20 @@ function clickedNode(d, root) {
 }
 
 //http://bl.ocks.org/syntagmatic/4092944
-function drawIt(root) {
-    //var nodes = cluster.nodes(root);
+function drawIt(root) {    
     var nodes = d3.hierarchy(root);
+    cluster(nodes);
 
-    var maxDepth = d3.max(nodes, function (d) {
-        return d.depth
+    var links = nodes.descendants().slice(1);
+  
+    var link = svg.selectAll("path.link").data(links);
+
+    var node = svg.selectAll("g.node").data(nodes.descendants(),function(d){
+        return d.data.Associate;
     });
 
 
-
-    cluster(nodes);
-    //    var nodes = root.descendants();
-    var links = nodes.descendants().slice(1)
-        //    var link = svg.selectAll("path.link").data(cluster.links(nodes));    
-    var link = svg.selectAll("path.link").data(links);
-    //This nodes callback is SUPER important for the update pattern
-    var node = svg.selectAll("g.node").data(nodes.descendants());
-
-    link.transition().duration(1000)
+    link.transition().duration(1000).attr("d", diagonal);
 
 
     d3.selectAll(".node-cicle").classed("highlight", false);
@@ -246,6 +241,7 @@ function drawIt(root) {
         })
         .style("opacity", 0)
         .style("cursor", function (d) {
+            d=d.data;
             return ((d._children || d.children) && d.Manager !== "Board of Directors") ? "pointer" : "not-allowed";
         })
         .on("mouseover", function () {
@@ -255,6 +251,7 @@ function drawIt(root) {
     //Cant trust the enter append here, reassign the event listener for all nodes each draw
     d3.selectAll(".node")
         .on("click", function (d) {
+            d=d.data;
             return ((d._children || d.children) && d.Manager !== "Board of Directors") ? clickedNode(d, root) : "";
         });
 
