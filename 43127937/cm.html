@@ -1,0 +1,109 @@
+<!doctype html>
+
+<title>CodeMirror: Linter Demo</title>
+<meta charset="utf-8" />
+
+<link rel="stylesheet" href="./cm/codemirror.css">
+<link rel="stylesheet" href="./cm/lint.css">
+<script src="./cm/codemirror.js"></script>
+<script src="./cm/javascript.js"></script>
+<script src="./cm/css.js"></script>
+
+<script src="./cm/csslint.js"></script>
+<script src="./dist/scsslint.js"></script>
+<script src="./cm/lint.js"></script>
+<script src="./cm/json-lint.js"></script>
+<!--<script src="./cm/css-lint.js"></script>-->
+<script src="./cm/scss-lint.js"></script>
+
+<style type="text/css">
+    .CodeMirror {
+        border: 1px solid black;
+    }
+</style>
+
+<article>
+    <h2>Linter Demo</h2>
+
+
+
+
+    <p><textarea id="code-css">@charset "UTF-8";
+
+@import url("booya.css") print, screen;
+@import "whatup.css" screen;
+@import "wicked.css";
+
+
+@charset "UTF-8";
+
+
+@namespace "http://www.w3.org/1999/xhtml";
+@namespace svg "http://www.w3.org/2000/svg";
+
+/*Warning: empty ruleset */
+.foo {
+}
+
+a{
+ width:1px;
+ b{
+ }
+}
+h1 {
+    font-weight: bold;
+}
+
+.foo h1 {
+    font-weight: bold;
+}
+
+.foo.bar {
+    zoom: 1;
+}
+
+li.inline {
+    width: 100%;
+}
+
+li.last {
+  display: inline;
+  padding-left: 3px !important;
+  padding-right: 3px;
+  border-right: 0px;
+}
+
+@media print {
+    li.inline {
+      color: black;
+    }
+}
+
+@page {
+  margin: 10%;
+  counter-increment: page;
+
+  @top-center {
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 2em;
+    content: counter(page);
+  }
+}
+</textarea></p>
+    <script>
+        var editor_css = CodeMirror.fromTextArea(document.getElementById("code-css"), {
+            lineNumbers: true,
+            mode: "text/x-scss",
+            gutters: ["CodeMirror-lint-markers"],
+            lint: {
+                options: {
+                    rules: {
+                        "no-empty-rulesets": 1,
+                    }
+                }
+            }
+        });
+    </script>
+
+</article>
