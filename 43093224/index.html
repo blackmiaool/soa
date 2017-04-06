@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>test</title>
+
+</head>
+
+<body>
+    <h1 style="color:white;text-align:center;">Try hover</h1>
+    <div class="show-area"></div>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="../js/jquery.min.js"></script>
+    <script>
+        function preloadImage(src, cb) {
+            //create a image
+            const $dom = $("<img />", {
+                src: src
+            });
+
+            //check whether the image is already loaded
+            if ($dom[0].naturalWidth) {
+                cb && cb();
+                return;
+            }
+
+            //Put the image at the left bottom of the screen, and set its opacity to 0.01 to keep it from people eyes. 
+            //Since it's actually rendered on the screen, the browser must load the image
+            $dom.css({
+                opacity: 0.01,
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                height: 1,
+                width: 1,
+                'z-index': 10000,
+                'pointer-events': 'none',
+            });
+
+            $(document.body).append($dom);
+
+            //listen its `load` event to remove it and invoke callback
+            $dom.on("load", function() {
+                $dom.remove();
+                cb && cb();
+            });
+        }
+
+
+        $("link").each(function() {
+            const href = $(this).attr("href");
+            $.get(href, function(style) {
+                const urls = [];
+                let match = style.match(/url\([\s\S]+?\)/g);
+
+                match.forEach(function(str) {
+                    str = str.replace(/\s/g, "")
+                        .replace(/^url\(/, "")
+                        .replace(/\)$/, "");
+                    let url = str.match(/^["']?([\S]+?)["']?$/);
+                    if (!url||!url[1]) {
+                        console.warn("Can't find url of " + str);
+                    } else {                        
+                        preloadImage(url[1]);
+                    }
+                    
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
