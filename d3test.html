@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>boot page</title>
+    <script src="./js/d3.v4.7.4.min.js"></script>
+</head>
+
+<body>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+        
+        #container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #my-svg {
+            overflow: visible;
+        }
+    </style>
+    <div id="container">
+
+    </div>
+    <script>
+        function $(selector, el = document) {
+            return el.querySelector(selector);
+        }
+
+        const radius = 100;
+        const svg = d3.select("#container").append("svg")
+            .attr("id", "my-svg")
+            .attr("width", 200)
+            .attr("height", 200)
+
+        const g = svg.append("g")
+
+        var color = d3.scaleLinear().domain([0, 1]).range(["rgb(25, 178, 159)", "rgb(172, 251, 242)"]);
+
+        var pie = d3.pie()
+            .startAngle(Math.PI / 2)
+            .endAngle(Math.PI / 2+ Math.PI * 2)
+            .sort(null)
+            .padAngle(Math.PI / 200)
+            .value(function(d) {
+                return d.value;
+            });
+
+        var pie2 = d3.pie()
+            .startAngle(Math.PI / 2)
+            .endAngle(Math.PI / 2+ Math.PI * 1)
+            .sort(null)
+            .padAngle(Math.PI / 200)
+            .value(function(d) {
+                return d.value;
+            });
+
+        var path = d3.arc()
+            .outerRadius(radius - 10)
+            .innerRadius(10);
+
+
+        var label = d3.arc()
+            .outerRadius(radius - 40)
+            .innerRadius(radius - 40);
+
+        var data = [{
+            label: "贵族",
+            value: 32,
+        }, {
+            label: "同辈",
+            value: 27,
+        }, {
+            label: "凝视",
+            value: 22,
+        }, {
+            label: "窥视",
+            value: 11,
+        }, {
+            label: "同等的人",
+            value: 8
+        }];
+
+
+
+
+
+        const maxValue = d3.max(data, function(d) {
+            return d.value;
+        });
+
+        var arc = g.selectAll(".arc")
+            .data(pie(data))
+            .enter()
+            .append("g")
+            .attr("class", "arc");
+        arc.append("path")
+            .transition().duration(3000)
+            .attr("d", path)
+            .attr("fill", function(d, i) {
+                return color(1 - d.data.value / maxValue);
+            });
+        g.selectAll("path")
+            .data(pie2(data))
+            .attr("d", path)
+
+
+        arc.append("text")
+            .attr("transform", function(d) {
+                return "translate(" + label.centroid(d) + ")";
+            })
+            .attr("dy", "0.35em")
+            .text(function(d) {
+
+                return d.data.label
+            });
+    </script>
+</body>
+
+</html>

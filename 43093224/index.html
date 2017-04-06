@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <h1 style="color:white;text-align:center;">Try hover</h1>
+    <h1 style="color:white;text-align:center;">Try to hover</h1>
     <div class="show-area"></div>
     <link rel="stylesheet" href="style.css">
 
@@ -48,7 +48,7 @@
             });
         }
 
-
+        //try to get the urls in the css file, and preload them
         $("link").each(function() {
             const href = $(this).attr("href");
             $.get(href, function(style) {
@@ -60,12 +60,12 @@
                         .replace(/^url\(/, "")
                         .replace(/\)$/, "");
                     let url = str.match(/^["']?([\S]+?)["']?$/);
-                    if (!url||!url[1]) {
+                    if (!url || !url[1]) {
                         console.warn("Can't find url of " + str);
-                    } else {                        
-                        preloadImage(url[1]);
+                    } else {
+                        url = url[1];
+                        preloadImage(url);
                     }
-                    
                 });
             });
         });
