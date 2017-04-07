@@ -13,7 +13,6 @@ function generateGraph(tooltip, data1, data2) {
         tooltip.chart = tooltip.chart.destroy();
         tooltip.selectAll('*').remove();
     }
-
     // create new chart
     tooltip.chart = c3.generate({
         bindto: tooltip,
@@ -58,16 +57,18 @@ var chart = c3.generate({
     },
     tooltip: {
         contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-            // this creates a chart inside the tooltips
-            var content = generateGraph(this.tooltip, d[0], d[1])
-                // we don't return anything - see .html function below
+            function $(selector, el) {
+                if (!el) {
+                    el = document;
+                }
+                return el.querySelector(selector);
+            }
+            generateGraph(this.tooltip, d[0], d[1]);
+            var tip = $(".c3-tooltip", this.tooltip[0][0]);
+            if (tip) {
+                tip.parentElement.removeChild(tip);
+            }
+            return this.getTooltipContent.apply(this, arguments) + this.tooltip.html();
         }
     }
 });
-
-// MONKEY PATCHING (MAY break if library updates change the code that sets tooltip content)
-// we override the html function for the tooltip to not do anything (since we've already created the tooltip content inside it)
-chart.internal.tooltip.html = function () {
-    // this needs to return the tooltip - it's used for positioning the tooltip
-    return chart.internal.tooltip;
-}

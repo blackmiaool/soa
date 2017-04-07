@@ -1,0 +1,25 @@
+.c3-tooltip-container {
+    max-height: none !important;
+}
+
+.c3-tooltip {
+    box-shadow: none;
+    width: 100%;
+}
+
+.c3-tooltip tr {
+    border-left: none !important;
+    border-right: none !important;
+}
+
+.c3-tooltip td.name {
+    border-left: none !important;
+}
+
+.c3-tooltip tr:first-child {
+    display: none;
+}
+
+.c3-tooltip-container .c3-chart-line {
+    opacity: 1 !important;
+}
