@@ -1,0 +1,60 @@
+body{
+  background: #eeeeee;
+}
+
+path {
+  stroke-width: 1px;
+  stroke: #eeeeee;
+}
+
+.small {
+  fill: steelblue;
+}
+
+.big {
+  stroke: #666;
+  fill: #ddd;
+}
+
+.small:hover {
+  stroke: steelblue;
+  fill: lightsteelblue;
+}
+
+.test {
+  padding: 30px
+}
+
+#progress {
+  position: relative;
+  margin-top: 20px
+}
+
+.progresschart {
+  background: white;
+  border-radius: 100px;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 1px solid grey;
+  margin-top: 5px;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.progresslabels {
+  position: absolute;
+  top: 0px;
+  left: 0;
+}
+
+
+.labelsvals{
+  fill: #ffffff;
+}
