@@ -21,10 +21,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding-top: 100px;
         }
         
         #my-svg {
             overflow: visible;
+        }
+        
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 1.5px;
         }
     </style>
     <div id="container">
@@ -40,37 +47,67 @@
             .attr("id", "my-svg")
             .attr("width", 200)
             .attr("height", 200)
-
+        
         const g = svg.append("g")
 
-        var color = d3.scaleLinear().domain([0, 1]).range(["rgb(25, 178, 159)", "rgb(172, 251, 242)"]);
+        var color = ["#19B29F", "#53C8BA", "#62DDCF", "#82E3D9", "#9EF0E8", "#74E7DA", "#93F3E8", "#ACFBF2", "#BFF3EE", "#D0FFFB"];
 
+//        function project(x, y) {
+//            var angle = (x - 90) / 180 * Math.PI,
+//                radius = y;
+//            return [radius * Math.cos(angle), radius * Math.sin(angle)];
+//        }
+        var diagonal = function(d) {
+     
+            d.x = d[1];
+            d.y = d[0];            
+            d.parent = {
+                x: d.x/3,
+                y: d.y/3
+            };
+            return "M" + [d.x, d.y] + "C" + [(d.x+d.parent.x)/2, d.y ] +
+                " " + [(d.x+d.parent.x)/2, d.parent.y ]+
+                " " + [d.parent.x, d.parent.y];
+        }
+        const padAngle = Math.PI / 200;
         var pie = d3.pie()
             .startAngle(Math.PI / 2)
-            .endAngle(Math.PI / 2+ Math.PI * 2)
+            .endAngle(Math.PI / 2 + Math.PI * 0.5)
             .sort(null)
-            .padAngle(Math.PI / 200)
+            .padAngle(padAngle)
             .value(function(d) {
                 return d.value;
             });
 
         var pie2 = d3.pie()
             .startAngle(Math.PI / 2)
-            .endAngle(Math.PI / 2+ Math.PI * 1)
+            .endAngle(Math.PI / 2 + Math.PI * 2)
             .sort(null)
-            .padAngle(Math.PI / 200)
+            .padAngle(padAngle)
+            .value(function(d) {
+                return d.value;
+            });
+        
+        var pieWhite = d3.pie()
+            .startAngle(Math.PI / 2)
+            .endAngle(Math.PI / 2 + Math.PI * 2)
+            .sort(null)
+            .padAngle(0)
             .value(function(d) {
                 return d.value;
             });
 
         var path = d3.arc()
-            .outerRadius(radius - 10)
-            .innerRadius(10);
+            //            .innerRadius(10);
 
 
         var label = d3.arc()
-            .outerRadius(radius - 40)
-            .innerRadius(radius - 40);
+            .outerRadius(radius + 15)
+            .innerRadius(radius + 15);
+        
+        var whiteArc = d3.arc()
+            .outerRadius(radius - 10)
+            .innerRadius(0);
 
         var data = [{
             label: "贵族",
@@ -102,26 +139,125 @@
             .enter()
             .append("g")
             .attr("class", "arc");
-        arc.append("path")
-            .transition().duration(3000)
-            .attr("d", path)
-            .attr("fill", function(d, i) {
-                return color(1 - d.data.value / maxValue);
-            });
-        g.selectAll("path")
-            .data(pie2(data))
-            .attr("d", path)
 
+        var tau = 2 * Math.PI;
+        
+        
+        
+        
+        
+        const pie2Data = pie2(data);
+        const text=arc.append("text")
+            .attr("class", "label")
+            .attr("x", function(d, i) {                
+                const x = label.centroid(pie2Data[i])[0];
+                return x;
 
-        arc.append("text")
-            .attr("transform", function(d) {
-                return "translate(" + label.centroid(d) + ")";
+            })
+            .attr("y", function(d, i) {
+                return label.centroid(pie2Data[i])[1];
             })
             .attr("dy", "0.35em")
+            .attr("opacity",0)
             .text(function(d) {
-
                 return d.data.label
             });
+        setTimeout(function() {
+            text.attr("x", function(d,i) {
+                    let x = label.centroid(pie2Data[i])[0];       
+                    if (x < 0) {
+                        x -= (this.clientWidth+10);
+                    }
+                    return x;
+                })
+                .attr("opacity",1)
+        });
+
+
+        const datatest = [
+            [50, 50],
+            [100, 100],
+            [150, 150],
+            [250, 250],
+            [150, 90],
+        ]
+        arc.append("path")
+            .attr("class", "link")
+            .attr("d", function(d, i) {
+                //            console.log("d",);
+                d = label.centroid(pie2Data[i]);
+                return diagonal([d[1], d[0]]);
+            });
+        arc.append("path")
+            .data(pieWhite(data))
+            .attr("fill", "#ffffff")
+            .attr("d",whiteArc)
+        
+        arc.append("path")
+            .attr("d", path)
+            .attr("fill", function(d, i) {
+                return color[i % color.length];
+            })
+            .transition().duration(3000)
+            .attrTween("d", function(d, a) {
+                return arcTween(pie2(data)[a].startAngle, pie2(data)[a].endAngle, radius - 10, a)(d);
+            });
+
+        const arc1 = d3.arc()
+            .innerRadius(1);
+
+
+
+
+        function arcTween(sa, ea, r, a) {
+            // The function passed to attrTween is invoked for each selected element when
+            // the transition starts, and for each element returns the interpolator to use
+            // over the course of transition. This function is thus responsible for
+            // determining the starting angle of the transition (which is pulled from the
+            // element’s bound datum, d.endAngle), and the ending angle (simply the
+            // newAngle argument to the enclosing function).
+            return function(d) {
+                // To interpolate between the two angles, we use the default d3.interpolate.
+                // (Internally, this maps to d3.interpolateNumber, since both of the
+                // arguments to d3.interpolate are numbers.) The returned function takes a
+                // single argument t and returns a number between the starting angle and the
+                // ending angle. When t = 0, it returns d.endAngle; when t = 1, it returns
+                // newAngle; and for 0 < t < 1 it returns an angle in-between.
+            
+                var interpolate = d3.interpolate(d.startAngle, sa);
+                var interpolate2 = d3.interpolate(d.endAngle, ea);
+                var interpolateR = d3.interpolate(10, r);
+
+                // The return value of the attrTween is also a function: the function that
+                // we want to run for each tick of the transition. Because we used
+                // attrTween("d"), the return value of this last function will be set to the
+                // "d" attribute at every tick. (It’s also possible to use transition.tween
+                // to run arbitrary code for every tick, say if you want to set multiple
+                // attributes from a single function.) The argument t ranges from 0, at the
+                // start of the transition, to 1, at the end.
+                return function(t) {
+                    //                    console.log(t)
+                    // Calculate the current arc angle based on the transition time, t. Since
+                    // the t for the transition and the t for the interpolate both range from
+                    // 0 to 1, we can pass t directly to the interpolator.
+                    //
+                    // Note that the interpolated angle is written into the element’s bound
+                    // data object! This is important: it means that if the transition were
+                    // interrupted, the data bound to the element would still be consistent
+                    // with its appearance. Whenever we start a new arc transition, the
+                    // correct starting angle can be inferred from the data.
+                    d.startAngle = interpolate(t);
+                    d.endAngle = interpolate2(t);
+
+                    // Lastly, compute the arc path given the updated data! In effect, this
+                    // transition uses data-space interpolation: the data is interpolated
+                    // (that is, the end angle) rather than the path string itself.
+                    // Interpolating the angles in polar coordinates, rather than the raw path
+                    // string, produces valid intermediate arcs during the transition.
+                    return arc1.outerRadius(interpolateR(t))(d);
+                };
+            };
+        }
     </script>
 </body>
 
