@@ -4,8 +4,8 @@ const _ = require('lodash');
 const path = require('path');
 const BabiliPlugin = require("babili-webpack-plugin");
 
-const env = process.env.NODE_ENV;
-
+let env = process.env.NODE_ENV;
+env='production'
 let entries;
 if (env === 'production') {
   entries = globEntries('./src/**/vue/*.js');

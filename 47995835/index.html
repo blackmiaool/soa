@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!DOCTYPE html>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+</head>
+
+<body>
+    <link rel="stylesheet" href="style.css">
+    <script src="index.js"></script>
+    <select class="custom-dropdown freeform" data-appendme="blorg"></select>
+    <script>
+        $('.custom-dropdown').each(function () {
+            var $select = $(this);
+            $select.css('width', '100%');
+            if ($select.hasClass('freeform')) {
+                $select.select2({
+                    tags: true,
+                    createTag: function (params) {
+                        return {
+                            id: params.term,
+                            text: params.term + $select.data('appendme'),
+                            newOption: true
+                        }
+                    },
+                    templateResult: function (data, container) {
+                        var $result = $("<span></span>");
+                        $result.text(data.text);
+                        if (data.newOption) {
+                            $result.text(data.text);
+                            //data.element is undefined here!!!
+                            return $result;
+                        }
+                    },
+                    placeholder: "Press ENTER for list of options",
+                    allowClear: true,
+                    selectOnClose: true
+                });
+            } else {
+                $(this).select2({
+                    placeholder: "Press ENTER for list of options",
+                    allowClear: true,
+                    selectOnClose: true,
+                });
+            }
+
+            $(this).on('select2:select', function (e) {
+                if (e.params.data.text != '') {
+
+                    var id = $(this).attr('id');
+                    var select2 = $("span[aria-labelledby=select2-" + id + "-container]");
+                    select2.removeAttr('style');
+                }
+            });
+            $(this).on('select2:close', function () {
+                $(this).focus();
+            });
+        });
+
+    </script>
+</body>
+
+</html>
